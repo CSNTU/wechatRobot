@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding:utf8
 import sys
-reload(sys)
-sys.setdefaultencoding( "utf8" )
+# reload(sys)
+# sys.setdefaultencoding( "utf8" )
 
 import itchat
 from itchat.content import *
@@ -16,7 +16,7 @@ from itchat.content import *
 # isGroupChat=False表示非群聊消息
 @itchat.msg_register([TEXT, MAP, CARD, NOTE, SHARING], isGroupChat=False)
 def text_reply(msg):
-	#print "here we are!"
+	#print( "here we are!"
 	itchat.send('稍后会给您回复!', msg['FromUserName'])
 
 # 自动回复图片等类别消息
@@ -42,31 +42,31 @@ def group_reply_text(msg):
 	if not chatroom_id in chatroom_ids:
 		return
 
-	#print "chatroom_id" + chatroom_id
+	#print( "chatroom_id" + chatroom_id
 	# 发送者的昵称
 	username = msg['ActualNickName']
-	#print "username",username
+	#print( "username",username
 	#获取群名
-	#print 11111, chatrooms_rename
+	#print( 11111, chatrooms_rename
 	group_name= chatrooms_rename.get(chatroom_id)
-	#print group_name
+	#print( group_name
 
 	if msg['Type'] == TEXT:
 		content = msg['Content']
-		#print 1
+		#print( 1)
 	elif msg['Type'] == SHARING:
 		content = msg['Text']
-		#print 2
+		#print( 2)
 
 	# 根据消息类型转发至其他需要同步消息的群聊
 	if msg['Type'] == TEXT:
 		for item in chatrooms:
-			#print 3
+			#print( 3)
 			if not item['UserName'] == chatroom_id:
-				#print 4
+				#print( 4)
 				itchat.send('%s—%s 说:\n%s' % (group_name,username, msg['Content']), item['UserName'])
 	elif msg['Type'] == SHARING:
-		#print 5
+		#print( 5)
 		for item in chatrooms:
 			if not item['UserName'] == chatroom_id:
 				itchat.send('%s-%s 分享：\n%s\n%s' % (group_name,username, msg['Text'], msg['Url']), item['UserName'])
@@ -103,25 +103,25 @@ itchat.auto_login(hotReload=True)
 chatrooms = itchat.get_chatrooms(update=True, contactOnly=True)
 chatroom_ids = [c['UserName'] for c in chatrooms]
 #chatroom_rename={}
-print '正在监测的群聊：', len(chatrooms), '个'
+print( '正在监测的群聊：', len(chatrooms), '个')
 #更改群名 ：  交流群+i
 i=2
 #for k in chatrooms.keys():
 chatrooms_rename={}
 for item in chatrooms:
 	chatrooms_rename[str(item['UserName'])]="Group"+str(i)
-	#print item['NickName']
-	#print item['UserName']
-	#print "交流群"+str(i)
+	#print( item['NickName'])
+	#print( item['UserName'])
+	#print( "交流群"+str(i))
 	#item['Nickname']=str(i)
 
 
 	i=i-1
-	print item['NickName']
-	print chatrooms_rename[item['UserName']]
+	print( item['NickName'])
+	print( chatrooms_rename[item['UserName']])
 #重新命名之后的群名
-print str(chatrooms_rename)
+str(chatrooms_rename)
 #原始群名
-print ' '.join([item['NickName'] for item in chatrooms])
+print( ' '.join([item['NickName'] for item in chatrooms]))
 # 开始监测
 itchat.run()
